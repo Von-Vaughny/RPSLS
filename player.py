@@ -9,11 +9,20 @@ class Player():
         self.gesture = ""
         self.current_round_gestures = []
         self.gesture_list = []
-        self.gestures = ["Rock", "Scissors", "Paper", "Lizard", "Spock"]
+        self.gestures = [["Rock", [], []], 
+                         ["Scissors", [], []], 
+                         ["Paper", [], []], 
+                         ["Lizard"], [], [], 
+                         ["Spock", [], []]]
 
-    # Function to track player's gesture
+    # Function to track player gestures each round.
     def add_current_gesture(self):
         self.current_round_gestures.append(self.gesture)
+
+    # Function to track player gestures from all rounds.
+    def add_round_gesture(self):
+        self.gesture_list.append(self.current_round_gestures)
+        self.current_round_gestures.clear()
 
     # Function to get number of player's wins
     def get_wins(self):
