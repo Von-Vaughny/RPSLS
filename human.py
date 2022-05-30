@@ -4,6 +4,7 @@ import re
 
 
 class Human(Player):
+    # Function to initialize human player's variables.
     def __init__(self):
         super().__init__(self)
         self.is_human = True
@@ -15,11 +16,11 @@ class Human(Player):
 
     # Function to get player's gesture
     def get_gesture(self):
-        self.gesture = ""
-        while not self.gesture:
+        self.gesture_no = ""
+        while not self.gesture_no:
             print("\nSelect a gesture: ")
             for i, gesture in enumerate(self.gestures):
-                print(f"Input {i+1} for {gesture}")
-            self.gesture = re.sub(r"[^1-6]", "", getpass("\nSelect a gesture: "))
-        return self.gesture
+                print(f"Input {i+1} for {gesture[0]}")
+            self.gesture_no = re.sub(r"[^1-6]", "", getpass("\nSelect a gesture: "))
+        return int(self.gesture_no) - 1
 
