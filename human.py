@@ -23,4 +23,3 @@ class Human(Player):
                 print(f"Input {i+1} for {gesture[0]}")
             self.gesture_no = re.sub(r"[^1-6]", "", getpass("\nSelect a gesture: "))
         return int(self.gesture_no) - 1
-
