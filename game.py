@@ -10,6 +10,7 @@ class Game():
         self.players = []
         self.user_selected_mode = ""  
         self.reserved_names = ["Siri", "Alexa", "Bixby"]
+        self.gestures = ["Rock", "Paper", "Scissors", "Lizard", "Spock"]
 
     # Function to run game.
     def run_game(self):
@@ -20,9 +21,24 @@ class Game():
 
     # Function to display welcome.
     def display_welcome(self):
-        print("Rock, Paper, Scissors, Lizard, Spock\n\nSAM KASS: Welcome to exciting world of Rock, Paper, Scissors, Lizard, Spock. I am your "
+        print("\nRock, Paper, Scissors, Lizard, Spock\n\nSAM KASS: Welcome to exciting world of Rock, Paper, Scissors, Lizard, Spock. I am your "
             "cohost Sam Kass...\nKAREN BRYLA: And I am your other cohost Karen Bryla, here for another game of ... \nUNISON: Rock, Paper, "
-            "Scissors, Lizard, Spock!")
+            "Scissors, Lizard, Spock!\nKAREN BRYLA: The rules are simple")
+        self.display_rules()
+
+    # Function to display game rules.
+    def display_rules(self):
+        print("\n\nRules of the Game:")
+        print(f"{self.gestures[0]} crushes {self.gestures[2]}")
+        print(f"{self.gestures[2]} cuts {self.gestures[1]}")
+        print(f"{self.gestures[1]} covers {self.gestures[0]}")
+        print(f"{self.gestures[0]} decimates {self.gestures[3]}")
+        print(f"{self.gestures[3]} poisons {self.gestures[4]}")
+        print(f"{self.gestures[4]} smashes {self.gestures[2]}")
+        print(f"{self.gestures[2]} decapitates {self.gestures[3]}")
+        print(f"{self.gestures[3]} eats {self.gestures[1]}")
+        print(f"{self.gestures[1]} disproves {self.gestures[4]}")
+        print(f"{self.gestures[4]} vaporizes {self.gestures[0]}")
 
     # Function to select game mode.
     def select_game_mode(self):
@@ -51,7 +67,7 @@ class Game():
 
     # Function to display list of players:
     def display_players(self):
-        print("\nList of players:\n")
+        print("\nList of players:")
         for i, player in enumerate(self.players):
             print(f"Player {i+1} name: {player.name}")
 
