@@ -23,6 +23,12 @@ class Human(Player):
             if self.name in self.player_reserved_names or self.name in self.players_names:
                 print(f"Cannot select any of the following names:", '%s' % ', '.join(map(str, self.player_reserved_names + self.players_names))) 
                 self.name = "" 
+            elif self.name:
+                self.sure = ""
+                while not(self.sure):
+                    self.sure = re.sub(r"[^0-1]", "", input(f"Are you sure you want to be named {self.name}? (Input 0 for no, 1 for yes): "))
+                    if int(self.sure) == 0:
+                        self.name = ""
 
     # Function to get player's gesture
     def get_gesture(self):

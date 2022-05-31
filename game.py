@@ -21,14 +21,16 @@ class Game():
 
     # Function to display welcome.
     def display_welcome(self):
-        print("\nRock, Paper, Scissors, Lizard, Spock\n\nSAM KASS: Welcome to exciting world of Rock, Paper, Scissors, Lizard, Spock. I am your "
-            "cohost Sam Kass...\nKAREN BRYLA: And I am your other cohost Karen Bryla, here for another game of ... \nUNISON: Rock, Paper, "
-            "Scissors, Lizard, Spock!\nKAREN BRYLA: The rules are simple")
+        print("\nRock, Paper, Scissors, Lizard, Spock\n")
+        print("SAM KASS: Welcome to exciting world of Rock, Paper, Scissors, Lizard, Spock. I am your cohost Sam Kass...")
+        print("KAREN BRYLA: And I am your other cohost Karen Bryla, here for another game of ... ")
+        print("UNISON: Rock, Paper, Scissors, Lizard, Spock!")
+        print("KAREN BRYLA: The rules are simple")
         self.display_rules()
 
     # Function to display game rules.
     def display_rules(self):
-        print("\n\nRules of the Game:")
+        print("\n\nRules of the Game")
         print(f"{self.gestures[0]} crushes {self.gestures[2]}")
         print(f"{self.gestures[2]} cuts {self.gestures[1]}")
         print(f"{self.gestures[1]} covers {self.gestures[0]}")
@@ -43,16 +45,13 @@ class Game():
     # Function to select game mode.
     def select_game_mode(self):
         while not(self.user_selected_mode):
-            print("\nSelect game mode:\n1. 2 Players\n2. 3 Players\n3. Random ")
-            self.user_selected_mode = re.sub(rf"[^1-3]", "", input("\nPlayer selects game mode "))
-            if self.user_selected_mode == "3":
-                self.user_selected_mode = random.randint(1, 2)
+            self.user_selected_mode = re.sub(rf"[^2-3]", "", input("\nSelect how many players (2 or 3): "))
 
     # Function to select list of players. 
     def select_players(self):
         random.shuffle(self.reserved_names)
         ndex = 0
-        for i in range(0, int(self.user_selected_mode) + 1):
+        for i in range(0, int(self.user_selected_mode)):
             self.player_type = ""
             while not(self.player_type):
                 print(f"\nSelect Player {i+1} type:\n1. Human\n2. AI")
