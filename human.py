@@ -6,11 +6,12 @@ import re
 class Human(Player):
     # Function to initialize human player's variables.
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
         self.is_human = True
         
     # Function to get player's name.
     def get_name(self):
+        self.name = ""
         while not(self.name):
             self.name = re.sub(r"[^a-zA-Z]", "", input("\nWhat is your name player? "))
 
@@ -22,4 +23,5 @@ class Human(Player):
             for i, gesture in enumerate(self.gestures):
                 print(f"Input {i+1} for {gesture[0]}")
             self.gesture_no = re.sub(r"[^1-6]", "", getpass("\nSelect a gesture: "))
-        return int(self.gesture_no) - 1
+        self.gesture_no = int(self.gesture_no) - 1
+        self.gesture = self.gestures[self.gesture_no][0]

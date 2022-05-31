@@ -5,12 +5,13 @@ import random
 class AI(Player):
     # Function to initialize AI player's variables.
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
 
     # Function to get AI's name.
-    def name_AI(self, AI_names):
-        self.name = random.choice(AI_names)
+    def get_name(self, name):
+        self.names = name
 
     # Function to get AI's gesture
     def get_gesture(self):
-        return random.randint(range(5)) #
+        self.gesture_no = random.randint(0, 4) 
+        self.gesture = self.gestures[self.gesture_no][0]
