@@ -25,7 +25,7 @@ class Human(Player):
                 self.name = "" 
             elif self.name:
                 self.sure = ""
-                while not(self.sure):
+                while len(self.sure) != 1:
                     self.sure = re.sub(r"[^0-1]", "", input(f"Are you sure you want to be named {self.name}? (Input 0 for no, 1 for yes): "))
                 if int(self.sure) == 0:
                     self.name = ""
@@ -33,10 +33,10 @@ class Human(Player):
     # Function to obtain player's gesture
     def get_gesture(self):
         self.gesture_no = ""
-        while not self.gesture_no:
-            print("\nSelect a gesture: ")
+        while len(self.gesture_no) != 1:
+            print(f"\n{self.name} select a gesture: ")
             for i, gesture in enumerate(self.gestures):
                 print(f"Input {i+1} for {gesture[0]}")
-            self.gesture_no = re.sub(r"[^1-6]", "", getpass("\nSelect a gesture: "))
+            self.gesture_no = re.sub(r"[^1-6]", "", getpass(f"\n{self.name} selects a gesture: "))
         self.gesture_no = int(self.gesture_no) - 1
         self.gesture = self.gestures[self.gesture_no][0]
