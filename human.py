@@ -11,7 +11,7 @@ class Human(Player):
         self.players_list = [player for player in players_list]
         self.player_reserved_names = ["Siri", "Alexa", "Bixby"]
         
-    # Function to get player's name.
+    # Function to obtain player's name.
     def get_name(self):
         self.players_names = []
         if len(self.players_list):
@@ -27,10 +27,10 @@ class Human(Player):
                 self.sure = ""
                 while not(self.sure):
                     self.sure = re.sub(r"[^0-1]", "", input(f"Are you sure you want to be named {self.name}? (Input 0 for no, 1 for yes): "))
-                    if int(self.sure) == 0:
-                        self.name = ""
+                if int(self.sure) == 0:
+                    self.name = ""
 
-    # Function to get player's gesture
+    # Function to obtain player's gesture
     def get_gesture(self):
         self.gesture_no = ""
         while not self.gesture_no:
