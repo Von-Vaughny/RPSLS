@@ -4,12 +4,9 @@ import random
 
 class AI(Player):
     # Function to initialize AI player's variables.
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
-
-    # Function to get AI's name.
-    def get_name(self, name):
-        self.names = name
+        self.name = name
 
     # Function to get AI's gesture
     def get_gesture(self):
