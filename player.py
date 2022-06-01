@@ -3,7 +3,7 @@ class Player():
     def __init__(self):
         self.name = ""
         self.is_human = False
-        self.wins = float(0)
+        self.wins = 0
         self.total_wins = 0
         self.gesture_no = ""
         self.gesture = ""
@@ -27,10 +27,7 @@ class Player():
 
     # Function to check player gesture against opponent gesture. 
     def check_gesture(self, opponent):
-        if self.gesture_no == opponent.gesture_no:
-            self.wins += float(0.5)
-            opponent.wins += float(0.5)
-        elif self.gesture in self.gestures[int(opponent.gesture_no)][1]:
+        if self.gesture in self.gestures[int(opponent.gesture_no)][1]:
             opponent.wins += 1
         elif self.gestures not in self.gestures[int(opponent.gesture_no)][1]:
             self.wins += 1
