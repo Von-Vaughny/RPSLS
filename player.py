@@ -3,9 +3,8 @@ class Player():
     def __init__(self):
         self.name = ""
         self.is_human = False
-        self.win = False
-        self.lose = False
-        self.wins = 0
+        self.wins = float(0)
+        self.total_wins = 0
         self.gesture_no = ""
         self.gesture = ""
         self.current_round_gestures = []
@@ -28,21 +27,22 @@ class Player():
 
     # Function to check player gesture against opponent gesture. 
     def check_gesture(self, opponent):
-        if int(self.gesture_no) == int(opponent.gesture_no):
-            self.win = True
-            opponent.win = True
-        elif self.gestures[int(self.gesture_no)][0] in self.gestures[int(opponent.gesture_no)][1]:
-            self.lose = True
-            opponent.win = True
-        else:
-            self.win = True
-            opponent.lose = True
+        if self.gesture_no == opponent.gesture_no:
+            self.wins += float(0.5)
+            opponent.wins += float(0.5)
+        elif self.gesture in self.gestures[int(opponent.gesture_no)][1]:
+            opponent.wins += 1
+        elif self.gestures not in self.gestures[int(opponent.gesture_no)][1]:
+            self.wins += 1
 
-    # Function to get number of player's wins
+    # Function to obtain number of player's wins in a round.
     def get_wins(self):
         return self.wins
 
-    # Function to add to player's wins.
-    def add_win(self):
-        self.wins += 1
+    # Function to add to player's total wins.
+    def add_total_win(self):
+        self.total_wins += 1
         
+    # Function to obtain player's total wins
+    def get_total_wins(self):
+        return self.total_wins

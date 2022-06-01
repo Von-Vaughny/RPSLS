@@ -9,7 +9,7 @@ class Human(Player):
         super().__init__()
         self.is_human = True
         self.players_list = [player for player in players_list]
-        self.player_reserved_names = ["Siri", "Alexa", "Bixby"]
+        self.player_reserved_names = ["Siri", "Alexa", "Bixby", "Google", "Bing"]
         
     # Function to obtain player's name.
     def get_name(self):
@@ -19,7 +19,7 @@ class Human(Player):
                 if player.name not in self.player_reserved_names:
                     self.players_names.append(self.players_list[i].name)
         while not(self.name):
-            self.name = re.sub(r"[^a-zA-Z]", "", input("\nWhat is your name player? "))
+            self.name = re.sub(r"[^a-zA-Z]", "", input("\nWhat is your name player? ")).title()
             if self.name in self.player_reserved_names or self.name in self.players_names:
                 print(f"Cannot select any of the following names:", '%s' % ', '.join(map(str, self.player_reserved_names + self.players_names))) 
                 self.name = "" 
@@ -37,6 +37,6 @@ class Human(Player):
             print(f"\n{self.name} select a gesture: ")
             for i, gesture in enumerate(self.gestures):
                 print(f"Input {i+1} for {gesture[0]}")
-            self.gesture_no = re.sub(r"[^1-6]", "", getpass(f"\n{self.name} selects a gesture: "))
+            self.gesture_no = re.sub(r"[^1-5]", "", getpass(f"\n{self.name} selects gesture: "))
         self.gesture_no = int(self.gesture_no) - 1
         self.gesture = self.gestures[self.gesture_no][0]

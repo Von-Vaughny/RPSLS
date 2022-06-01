@@ -8,7 +8,7 @@ class AI(Player):
         super().__init__()
         self.name = name
 
-    # Function to get AI's gesture
+    # Function to obtain AI's gesture
     def get_gesture(self):
         self.gesture_no = random.randint(0, 4) 
         self.gesture = self.gestures[self.gesture_no][0]
