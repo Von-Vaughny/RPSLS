@@ -34,9 +34,9 @@ class Human(Player):
     def get_gesture(self):
         self.gesture_no = ""
         while len(self.gesture_no) != 1:
-            print(f"\n{self.name} select a gesture: ")
+            print(f"\n{self.name}, please select a gesture: ")
             for i, gesture in enumerate(self.gestures):
                 print(f"Input {i+1} for {gesture[0]}")
-            self.gesture_no = re.sub(r"[^1-5]", "", getpass(f"\n{self.name} selects gesture: "))
+            self.gesture_no = re.sub(r"[^1-5]", "", getpass(f"\n{self.name} selects gesture (input is hidden): "))
         self.gesture_no = int(self.gesture_no) - 1
         self.gesture = self.gestures[self.gesture_no][0]

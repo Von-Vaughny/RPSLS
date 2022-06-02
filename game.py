@@ -1,3 +1,4 @@
+from player import Player
 from human import Human
 from ai import AI
 import random
@@ -10,6 +11,7 @@ class Game():
     def __init__(self):
         self.turn = 0
         self.round = 1
+        self.stop = False
         self.players = [] 
         self.game_mode = ""
         self.game_mode_var = ""
@@ -85,23 +87,23 @@ class Game():
             print("\nSelect game mode (rounds):\n1. Best of 3\n2. Best of 5\n3. Best of 7")
             self.game_mode = re.sub(rf"[^1-3]", "", input("\nPlayer selects game mode "))
         self.rounds = int(self.game_mode) * 2 + 1
+        self.wins_needed = 4 if self.game_mode == '3' else 3 if self.game_mode == '2' else 2
         self.game_mode_var = ""
         if self.players_no == '3':
             while len(self.game_mode_var) != 1:
                 self.tie = "3" if self.game_mode == '1' else "2"
-                print(f"\nSelect game mode variation:\n1. Elimination (First two players to win 1 round move on)\n2. Tie Breaker (In case of a "
-                    f"{self.tie}-way tie, tie breaker round decides winner)")
+                print(f"\nSelect game mode variation: \n1. Tie Breaker (In case of a {self.tie}-way tie, tie breaker round decides winner)"\
+                    f"\n2. Elimination (First two players to win 1 round move on)\nConsidering Doublefist variation")
                 self.game_mode_var = re.sub(rf"[^1-2]", "", input("\nPlayer selects game mode variation "))
 
     # Function to obtain player gestures.
     def rock_paper_scissors_lizard_spock(self):
-        while self.round - 1 != self.rounds:
+        while self.round:
             self.get_round_turn()
             self.get_players()
             self.get_gestures()
             self.display_gestures()
             self.check_gestures()
-            self.get_wins()
             self.get_winner()
             self.display_status()
             self.reset()
@@ -109,15 +111,16 @@ class Game():
 
     # Function to obtain round and turn of current game.
     def get_round_turn(self):
-        print(f"\nRound {self.round}.{self.turn}")
+        print(f"\nRound {self.round}.{self.turn} {'(Tie Breaker)' if self.round > self.rounds else ''}")
 
     # Function to build list of players.
     def get_players(self):
-        if self.turn == 0:
-            self.players_list = self.players
-        elif self.turn > 0:
-            self.players_list = [self.players_list[i] for i in self.max_ndx]
-        
+        if self.round <= self.rounds:
+            if self.turn == 0:
+                self.players_list = self.players
+            elif self.turn > 0:
+                self.players_list = [self.players_list[i] for i in self.max_turn_ndx]
+
     # Function to obtain players' gestures
     def get_gestures(self):
         for player in self.players_list:
@@ -125,34 +128,43 @@ class Game():
 
     # Function to show players' gestures.
     def display_gestures(self):
+        print()
         for player in self.players_list:
             print(f"{player.name} selected {player.gesture}")
 
-    # Function to check players' gestures against each other.
+    # Function to check players' gestures against each other. // OTHER CODING NOT WORKING AS I WOULD IMAGINE
     def check_gestures(self):
-        self.remaining_players = [player for player in self.players_list]
-        for player in self.remaining_players:
+        self.players_check = [player for player in self.players_list]
+        for player in self.players_check:
             self.current_player = player
-            for rem_player in self.remaining_players:
-                self.current_player.check_gesture(rem_player)
+            self.remaining_players = [player for player in self.players_check if player != self.current_player]
+            for remaining_player in self.remaining_players:
+                self.current_player.check_gesture(remaining_player)
 
-    # Function to obtain players' wins.
-    def get_wins(self):
-        self.round_wins = [player.wins for player in self.players_list]
-
-    # Function to obtain winner by getting all players' round wins.
+    # Function to obtain round winner based on the max number of wins attained during the turn.
     def get_winner(self):
-        self.winner = ""
-        self.max_wins = max(self.round_wins)
-        self.max_ndx = [i for i, wins in enumerate(self.round_wins) if wins == self.max_wins]
-        if len(self.max_ndx) == 1:
-            self.winner = self.players_list[self.max_ndx[0]]
+        self.winner = None
+        self.turn_wins = [player.wins for player in self.players_list]
+        self.max_turn_wins = max(self.turn_wins)
+        self.max_turn_ndx = [i for i, wins in enumerate(self.turn_wins) if wins == self.max_turn_wins]
+        if len(self.max_turn_ndx) == 1:
+            self.winner = self.players_list[self.max_turn_ndx[0]]
             self.winner.add_total_win()
+            self.check_for_tied_players()
             self.check_for_eliminating_player()
+
+    # Function to determine players for tie breaker round in game mode Tie Breaker.
+    def check_for_tied_players(self):
+        self.tie_breaker_players = [player for player in self.players_list if player.total_wins == (self.wins_needed - 1)]
+        if self.round == self.rounds and len(self.tie_breaker_players) > 1:
+            self.players_list = self.tie_breaker_players
+        elif self.round == self.rounds and len(self.tie_breaker_players) == 1:
+            self.winner = self.tie_breaker_players[0]
+            self.stop = True 
         
-    # Function to eliminate losing player in game mode Elimination
+    # Function to eliminate losing player in game mode Elimination.
     def check_for_eliminating_player(self):
-        if len(self.players) == 3 and self.game_mode_var == "1": 
+        if len(self.players) == 3 and self.game_mode_var == "2": 
             self.players_w_wins = [player for player in self.players if player.total_wins > 0]
             if len(self.players_w_wins) == 2:
                 self.eliminated_players = [player for player in self.players if player not in self.players_w_wins]
@@ -162,28 +174,38 @@ class Game():
     def display_status(self):
         if self.winner:
             print(f"\nRound {self.round} winner is {self.winner.name}!")
-        elif len(self.max_ndx) > 1:
-            status = f"{self.players_list[self.max_ndx[0]].name} and {self.players_list[self.max_ndx[1]].name}" if len(self.max_ndx) == 2 else\
-                f"{self.players_list[self.max_ndx[0]].name}, {self.players_list[self.max_ndx[1]].name} and "\
-                f"{self.players_list[self.max_ndx[2]].name}"
+        elif len(self.max_turn_ndx) > 1:
+            status = f"{self.players_list[self.max_turn_ndx[0]].name} and {self.players_list[self.max_turn_ndx[1]].name}" if len(self.max_turn_ndx)\
+                == 2 else f"{self.players_list[self.max_turn_ndx[0]].name}, {self.players_list[self.max_turn_ndx[1]].name} and "\
+                f"{self.players_list[self.max_turn_ndx[2]].name}"
             print(f"\nIts a tie! {status} will play again!")
         for player in self.eliminated_players:
-            print(f"Player {player.name} has been eliminated!")
+            print(f"{player.name} has been eliminated!")
             del self.eliminated_players[0]
         os.system('pause')
 
     # Function to reset game stats.
     def reset(self):
+        # If there is a winner, reset round.turn 
         if self.winner:
             self.round += 1
             self.turn = 0
-        elif len(self.max_ndx) > 1:
+        # If there is a tie, increment turn
+        elif len(self.max_turn_ndx) > 1:
             self.turn += 1
+        # Reset all player.wins stat
         for player in self.players:
-                player.wins = 0
+            player.wins = 0
+        # If any player has reached the number of wins needed to win match, stop the match.
+        for player in self.players:
+            if player.total_wins == self.wins_needed:
+                self.round = 0
+        if self.stop:
+            self.round = 0
 
     # Function to show end game stats
     def display_end_game_stats(self):
         print("\nEnd Game Stats")
         for player in self.players:
             print(f"{player.name} total wins: {player.total_wins}")
+        print(f"\n{self.winner.name} takes the match!")

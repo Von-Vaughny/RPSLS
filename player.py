@@ -27,10 +27,10 @@ class Player():
 
     # Function to check player gesture against opponent gesture. 
     def check_gesture(self, opponent):
-        if self.gesture in self.gestures[int(opponent.gesture_no)][1]:
-            opponent.wins += 1
-        elif self.gestures not in self.gestures[int(opponent.gesture_no)][1]:
+        if self.gesture not in self.gestures[int(opponent.gesture_no)][1]:
             self.wins += 1
+        elif self.gesture in self.gestures[int(opponent.gesture_no)][1]:
+            opponent.wins += 1
 
     # Function to obtain number of player's wins in a round.
     def get_wins(self):
