@@ -1,45 +1,47 @@
+import random
+
+
 class Player():
     # Function to initialize variables.
     def __init__(self):
         self.name = ""
         self.is_human = False
-        self.wins = 0
-        self.total_wins = 0
-        self.gesture_no = ""
-        self.gesture = ""
-        self.current_round_gestures = []
-        self.gesture_list = []
-        # [Gesture, [Wins Against]]
+        self.turn_wins = 0
+        self.round_wins = 0
         self.gestures = [["Rock", ["Scissors", "Lizard"]], 
                          ["Scissors", ["Paper", "Lizard"]], 
                          ["Paper", ["Rock", "Spock"]], 
                          ["Lizard", ["Paper", "Spock"]], 
                          ["Spock", ["Scissors", "Rock"]]]
+        self.gesture = ""
+        self.gesture_no = ""
+        self.cur_round_gestures = []
+        self.all_rounds_gestures = []
 
     # Function to track player gestures each round for def display_log(self).
     # def add_current_gesture(self):
-    #     self.current_round_gestures.append(self.gesture)
+    #     self.cur_round_gestures.append(self.gesture)
 
     # Function to track player gestures from all rounds for for def display_log(self).
     # def add_round_gesture(self):
     #    self.gesture_list.append(self.current_round_gestures)
     #    self.current_round_gestures.clear()
 
-    # Function to check player gesture against opponent gesture. 
+    # Function to check player's gesture against opponent's gesture. 
     def check_gesture(self, opponent):
-        if self.gesture not in self.gestures[int(opponent.gesture_no)][1]:
-            self.wins += 1
+        if self.gesture not in self.gestures[int(opponent.gesture_no)][1] and self.gesture != self.gestures[int(opponent.gesture_no)][0]:
+            self.turn_wins += 1
         elif self.gesture in self.gestures[int(opponent.gesture_no)][1]:
-            opponent.wins += 1
+            opponent.turn_wins += 1
 
     # Function to obtain number of player's wins in a round.
     def get_wins(self):
-        return self.wins
+        return self.turn_wins
 
     # Function to add to player's total wins.
-    def add_total_win(self):
-        self.total_wins += 1
+    def add_round_win(self):
+        self.round_wins += 1
         
     # Function to obtain player's total wins
-    def get_total_wins(self):
-        return self.total_wins
+    def get_round_wins(self):
+        return self.round_wins
