@@ -25,7 +25,7 @@ class Human(Player):
                 self.sure = ""
                 while len(self.sure) != 1:
                     self.sure = re.sub(r"[^0-1]", "", input(f"Are you sure you want to be named {self.name}? (Input 0 for no, 1 for yes): "))
-                    if int(self.sure) == 0:
+                    if self.sure == '0':
                         self.name = ""
 
     # Function to obtain player's gesture

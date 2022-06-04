@@ -156,12 +156,15 @@ class Game():
 
     # Function to determine players for tie breaker round in game mode Tie Breaker.
     def check_for_tied_players(self):
-        self.tie_breaker_players = [player for player in self.players_list if player.round_wins == (self.wins_needed - 1)]
-        if self.round == self.rounds and len(self.tie_breaker_players) > 1:
-            self.players_list = self.tie_breaker_players
-        elif self.round == self.rounds and len(self.tie_breaker_players) == 1:
-            self.winner = self.tie_breaker_players[0]
-            self.stop = True 
+        round_wins = [player.round_wins for player in self.players_list]
+        max_round_wins = max(round_wins)
+        self.max_round_ndx = [i for i, wins in enumerate(round_wins) if wins == max_round_wins]
+        print(round_wins)
+        if self.round == self.rounds and len(self.max_round_ndx) > 1:
+            self.players_list = [self.players_list[i] for i in self.max_round_ndx]
+        elif self.round == self.rounds and len(self.max_round_ndx) == 1:
+            self.stop = True
+
         
     # Function to eliminate losing player in game mode Elimination.
     def check_for_eliminating_player(self):
@@ -201,7 +204,9 @@ class Game():
         for player in self.players:
             if player.round_wins == self.wins_needed:
                 self.round = 0
+        # If no player has reached the number of wins needed to win match in Tie Breaker Mode, winner is the player with the most wins.
         if self.stop:
+            self.winner = self.players_list[self.max_round_ndx[0]]
             self.round = 0
 
     # Function to show end game stats
