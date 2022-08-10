@@ -102,8 +102,8 @@ class Game():
             if (int(self.players_no) >= self.rounds):
                 print("Considering Elimination w/Tie Breaker")
             self.game_mode_var = re.sub(rf"[^1-2]", "", input("\nPlayer selects game mode variation "))
-        if (self.game_mode_var == "2"):
-            self.players_remaining_no = int(self.game_mode) * 2
+        # if (self.game_mode_var == "3"):
+        #     self.players_remaining_no = int(self.game_mode) * 2
 
     # Function to obtain player gestures.
     def rock_paper_scissors_lizard_spock(self):
@@ -129,15 +129,22 @@ class Game():
     # Function to obtain players' gestures
     def get_gestures(self):
         for player in self.players_list:
-            player.get_gesture()
+            player.select_gesture()
 
     # Function to check players' gestures against each other. // Refactor with gestures class
     def check_gestures(self):
         players = [player for player in self.players_list]
+        players_gestures = [player.gesture for player in self.players_list]
         for player in self.players_list:
+            player_gesture = player.get_gesture()
             remaining_players = [rem_player for rem_player in players if rem_player != player]
             for remaining_player in remaining_players:
-                player.check_gesture(remaining_player)
+                remaining_player_gesture = remaining_player.get_gesture()
+                win_hand = player_gesture.check_vs_opponent(remaining_player_gesture)
+                if (win_hand == 1):
+                    player.add_turn_win()
+                elif (win_hand == 0):
+                    remaining_player.add_turn_win()
             del players[0] 
 
     # Function to show players' gestures.
@@ -190,11 +197,11 @@ class Game():
         players_who_won = [player.name for player in self.players_list if player.round_wins == self.max_round_wins] if\
             (self.round == self.rounds and self.turn == 0) else [player.name for player in self.players_list if player.turn_wins == self.max_wins]
         statusTemp = "Its a tie! " + ', '.join(map(str, players_who_won))
-        status = " and ".join(statusTemp.rsplit(", ", 1)) + (" will battle it out in a Tie Breaker round" if\
+        status = " and ".join(statusTemp.rsplit(", ", 1)) + (" will battle it out in a Tie Breaker round!" if\
             (self.round == self.rounds and self.turn == 0) else " will play again!")       
         if self.winner:
-            print(f"\nRound {self.round} winner is {self.winner.name}!") 
-        if (self.round == self.rounds and self.turn == 0) or not(self.winner): 
+            print(f"\nRound {self.round} winner is {self.winner.name}!")
+        if (not(self.winner)) or (self.round == self.rounds and self.turn == 0 and not(self.winner)): 
                 print(f"\n{status}")  
         for player in self.eliminated_players:
             print(f"{player.name} has been eliminated!")

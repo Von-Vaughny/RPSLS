@@ -9,6 +9,6 @@ class AI(Player):
         self.name = name
 
     # Function to obtain AI's gesture
-    def get_gesture(self):
+    def select_gesture(self):
         self.gesture_no = random.randint(0, 4) 
-        self.gesture = self.gestures[self.gesture_no][0]
+        self.set_gesture(self.gestures_list[self.gesture_no])
